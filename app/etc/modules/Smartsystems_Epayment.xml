@@ -1,0 +1,11 @@
+<config>
+	<modules>
+		<Smartsystems_Epayment>
+			<active>true</active>
+                  <codePool>local</codePool>
+                  <depends>
+                    <!--  <Smartsystems_Epayment /> -->
+                  </depends>
+		</Smartsystems_Epayment>
+	</modules>
+</config>

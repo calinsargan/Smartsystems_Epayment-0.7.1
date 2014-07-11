@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+	 <Smartsystems_Epayment>
+		<version>0.1.0</version>
+	 </Smartsystems_Epayment>
+  </modules>
+
+  <global>
+	<!-- declare model group for new module -->
+	  <models>
+		<!-- model group alias to be used in Mage::getModel('newmodule/...') -->
+		  <epayment>
+			  <class>Smartsystems_Epayment_Model</class>
+		  </epayment>
+	  </models>
+
+	<!-- declare resource setup for new module -->
+	  <resources>
+		  <epayment_setup>
+			  <setup>
+				  <module>Smartsystems_Epayment</module>
+			  </setup>
+			  <connection>
+				<!-- do not create new connection, use predefined core setup connection -->
+				  <use>core_setup</use>
+			  </connection>
+		  </epayment_setup>
+		  <epayment_write>
+			  <connection>
+				<use>core_write</use>
+			  </connection>
+		  </epayment_write>
+		  <epayment_read>
+			 <connection>
+			  <use>core_read</use>
+			</connection>
+		  </epayment_read>
+	  </resources>
+        <blocks>
+            <epayment><class>Smartsystems_Epayment_Block</class></epayment>
+        </blocks>
+        <helpers>
+            <epayment><class>Smartsystems_Epayment_Helper</class></epayment>
+        </helpers>
+	<sales>
+  		<order>
+                <statuses>
+                    <pending translate="label"><label>Pending</label></pending>
+                    <pending_paypal translate="label"><label>Pending PayPal</label></pending_paypal>
+                    <pending_epayment translate="label"><label>Pending ePayment</label></pending_epayment>
+                    <processing translate="label"><label>Processing</label></processing>
+                    <holded translate="label"><label>On Hold</label></holded>
+                    <complete translate="label"><label>Complete</label></complete>
+                    <closed translate="label"><label>Closed</label></closed>
+                    <canceled translate="label"><label>Canceled</label></canceled>
+                </statuses>
+                <states>
+                    <new translate="label">
+                        <label>New</label>
+                        <statuses>
+                            <pending/>
+                        </statuses>
+                        <visible_on_front/>
+                    </new>
+                    <pending_payment translate="label">
+                        <label>Pending Payment</label>
+                        <statuses>
+                        	<pending_paypal/>
+					<pending_epayment/>
+                        </statuses>
+				<visible_on_front/> 
+                    </pending_payment>
+                    <processing translate="label">
+                        <label>Processing</label>
+                        <statuses>
+                            <processing/>
+                        </statuses>
+                        <visible_on_front/>
+                    </processing>
+                    <complete translate="label">
+                        <label>Complete</label>
+                        <statuses>
+                            <complete/>
+                        </statuses>
+                        <visible_on_front/>
+                    </complete>
+                    <closed translate="label">
+                        <label>Closed</label>
+                        <statuses>
+                            <closed/>
+                        </statuses>
+                        <visible_on_front/>
+                    </closed>
+                    <canceled translate="label">
+                        <label>Canceled</label>
+                        <statuses>
+                            <canceled/>
+                        </statuses>
+                        <visible_on_front/>
+                    </canceled>
+                    <holded translate="label">
+                        <label>On Hold</label>
+                        <statuses>
+                            <holded/>
+                        </statuses>
+                        <visible_on_front/>
+                    </holded>
+                </states>
+            </order>
+	</sales>
+  </global>
+
+    <frontend>
+        <secure_url>
+            <epayment>/epayment/index</epayment>
+        </secure_url>
+        <routers>
+            <epayment>
+                <use>standard</use>
+                <args>
+                    <module>Smartsystems_Epayment</module>
+                    <frontName>epayment</frontName>
+                </args>
+            </epayment>
+        </routers>
+        <translate>
+            <modules>
+                <Smartsystems_Epayment>
+                    <files>
+                        <default>Smartsystems_Epayment.csv</default>
+                    </files>
+                </Smartsystems_Epayment>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Smartsystems_Epayment>
+                    <files>
+                        <default>Smartsystems_Epayment.csv</default>
+                    </files>
+                </Smartsystems_Epayment>
+            </modules>
+        </translate>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <epayment>
+                                            <title>ePayment Section</title>
+                                        </epayment>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+<!-- declare default configuration values for this module -->
+  <default>
+	<epayment>
+            <wpp>
+                <api_password backend_model="adminhtml/system_config_backend_encrypted"/>
+                <api_signature backend_model="adminhtml/system_config_backend_encrypted"/>
+                <api_username backend_model="adminhtml/system_config_backend_encrypted"/>
+            </wpp>
+            <wps>
+                <business_account backend_model="adminhtml/system_config_backend_encrypted"/>
+            </wps>
+	</epayment>
+	<payment>
+		<epayment>
+			<active>0</active>
+            	<!-- <debug>0</debug> -->
+      	      <test>1</test>
+			<model>epayment/standard</model>
+			<order_status>pending_epayment</order_status>
+			<title>GECAD ePayment</title>
+	            <cgi_url>https://secure.epayment.ro/order/lu.php</cgi_url>
+      	      <!-- <email_customer>0</email_customer> -->
+	            <login backend_model="adminhtml/system_config_backend_encrypted"/>
+            	<!-- <merchant_email></merchant_email> -->
+	            <trans_key backend_model="adminhtml/system_config_backend_encrypted"/>
+			<cctypes>AE,VI,MC,DI</cctypes>
+			<payment_action>authorize</payment_action>
+			<allowspecific>0</allowspecific>
+		  </epayment>
+	</payment>
+  </default>
+</config>
